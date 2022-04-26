@@ -3,11 +3,11 @@ import {Entity, model, property} from '@loopback/repository';
 @model({settings: {strict: false}})
 export class Todo extends Entity {
   @property({
-    type: 'number',
+    type: 'string',
     id: true,
     generated: true,
   })
-  id?: number;
+  id?: string;
 
   @property({
     type: 'string',
@@ -29,7 +29,7 @@ export class Todo extends Entity {
 
   // Indexer property to allow additional data
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [prop: string]: any;
+  // [prop: string]: any;
 
   constructor(data?: Partial<Todo>) {
     super(data);

@@ -7,13 +7,13 @@ import {
   Where,
 } from '@loopback/repository';
 import {
-  post,
-  param,
+  del,
   get,
   getModelSchemaRef,
+  param,
   patch,
+  post,
   put,
-  del,
   requestBody,
   response,
 } from '@loopback/rest';
@@ -23,7 +23,7 @@ import {TodoRepository} from '../repositories';
 export class TodoController {
   constructor(
     @repository(TodoRepository)
-    public todoRepository : TodoRepository,
+    public todoRepository: TodoRepository,
   ) {}
 
   @post('/todos')
@@ -47,16 +47,14 @@ export class TodoController {
     return this.todoRepository.create(todo);
   }
 
-  @get('/todos/count')
-  @response(200, {
-    description: 'Todo model count',
-    content: {'application/json': {schema: CountSchema}},
-  })
-  async count(
-    @param.where(Todo) where?: Where<Todo>,
-  ): Promise<Count> {
-    return this.todoRepository.count(where);
-  }
+  // @get('/todos/count')
+  // @response(200, {
+  //   description: 'Todo model count',
+  //   content: {'application/json': {schema: CountSchema}},
+  // })
+  // async count(@param.where(Todo) where?: Where<Todo>): Promise<Count> {
+  //   return this.todoRepository.count(where);
+  // }
 
   @get('/todos')
   @response(200, {
@@ -70,9 +68,7 @@ export class TodoController {
       },
     },
   })
-  async find(
-    @param.filter(Todo) filter?: Filter<Todo>,
-  ): Promise<Todo[]> {
+  async find(@param.filter(Todo) filter?: Filter<Todo>): Promise<Todo[]> {
     return this.todoRepository.find(filter);
   }
 
@@ -105,8 +101,8 @@ export class TodoController {
     },
   })
   async findById(
-    @param.path.number('id') id: number,
-    @param.filter(Todo, {exclude: 'where'}) filter?: FilterExcludingWhere<Todo>
+    @param.path.string('id') id: string,
+    @param.filter(Todo, {exclude: 'where'}) filter?: FilterExcludingWhere<Todo>,
   ): Promise<Todo> {
     return this.todoRepository.findById(id, filter);
   }
@@ -116,7 +112,7 @@ export class TodoController {
     description: 'Todo PATCH success',
   })
   async updateById(
-    @param.path.number('id') id: number,
+    @param.path.string('id') id: string,
     @requestBody({
       content: {
         'application/json': {
@@ -134,7 +130,7 @@ export class TodoController {
     description: 'Todo PUT success',
   })
   async replaceById(
-    @param.path.number('id') id: number,
+    @param.path.string('id') id: string,
     @requestBody() todo: Todo,
   ): Promise<void> {
     await this.todoRepository.replaceById(id, todo);
@@ -144,7 +140,7 @@ export class TodoController {
   @response(204, {
     description: 'Todo DELETE success',
   })
-  async deleteById(@param.path.number('id') id: number): Promise<void> {
+  async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.todoRepository.deleteById(id);
   }
 }
